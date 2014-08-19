@@ -1,0 +1,23 @@
+{
+    "name": "researchsquare/opauth-researchsquare",
+    "description": "Research Square strategy for Opauth",
+    "keywords": ["authentication","auth","researchsquare"],
+    "homepage": "https://github.com/researchsquare/opauth-researchsquare",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Vic Vijayakumar",
+            "email": "needcaffeine@gmail.com",
+            "homepage": "http://vicvijayakumar.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0",
+        "opauth/opauth": ">=0.2.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "ResearchSquare\\Opauth\\": "."
+        }
+    }
+}
