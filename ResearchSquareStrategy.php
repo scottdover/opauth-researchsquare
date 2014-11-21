@@ -10,6 +10,11 @@ use Opauth\Opauth\AbstractStrategy;
 class ResearchSquareStrategy extends AbstractStrategy
 {
     /**
+     * The oauth2 endpoint.
+     */
+    protected $endpoint;
+
+    /**
      * Compulsory config keys, listed as unassociative arrays
      */
     public $expects = array('client_id', 'client_secret');
@@ -37,9 +42,21 @@ class ResearchSquareStrategy extends AbstractStrategy
         'info.image' => 'picture'
     );
 
+    public function __construct($config, $callbackUrl, \Opauth\Opauth\HttpClientInterface $client)
+    {
+        // Set the base endpoint for this service.
+        $this->endpoint = 'https://identity.researchsquare.com';
+        if (isset($config['_endpoint'])) {
+            $this->endpoint = rtrim($config['_endpoint'], '/');
+            unset($config['_endpoint']);
+        }
+
+        parent::__construct($config, $callbackUrl, $client);
+    }
+
     public function request()
     {
-        $url = 'https://identity.dev.sqr.io/oauth2/authorize';
+        $url = $this->endpoint . '/oauth2/authorize';
         $params = array(
             'client_id' => $this->strategy['client_id'],
             'redirect_uri' => $this->callbackUrl(),
@@ -67,7 +84,7 @@ class ResearchSquareStrategy extends AbstractStrategy
         }
 
         $params = array('access_token' => $results->access_token);
-        $userinfo = $this->http->get('https://identity.dev.sqr.io/oauth2/userinfo', $params);
+        $userinfo = $this->http->get($this->endpoint . '/oauth2/userinfo', $params);
 
         if (empty($userinfo)) {
             return $this->error('Failed when attempting to query for user information.', 'userinfo_error');
@@ -98,6 +115,6 @@ class ResearchSquareStrategy extends AbstractStrategy
             'grant_type' => 'authorization_code',
         );
 
-        return $this->http->post('https://identity.dev.sqr.io/oauth2/token', $params);
+        return $this->http->post($this->endpoint . '/oauth2/token', $params);
     }
 }
