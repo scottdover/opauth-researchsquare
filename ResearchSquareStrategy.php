@@ -81,7 +81,7 @@ class ResearchSquareStrategy extends AbstractStrategy
 
         if (empty($results->access_token)) {
             return $this->error(
-                'Failed when attempting to obtain access token. Response data' . print_r($results, true), 
+                'Failed when attempting to obtain access token. Response data: ' . print_r($results, true), 
                 'access_token_error', 
                 $response
             );
